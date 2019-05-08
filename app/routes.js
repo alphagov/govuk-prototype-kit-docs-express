@@ -12,6 +12,18 @@ const utils = require('../lib/utils.js')
 
 // Page routes
 
+router.use(function (req, res, next) {
+  // Remove the noindex robots header set by the kit, to enable search engines to index the docs site
+  res.removeHeader('X-Robots-Tag')
+  next()
+})
+
+// Allow search engines to index the Prototype Kit documentation site
+router.get('/robots.txt', function (req, res) {
+  res.type('text/plain')
+  res.send('User-agent: *\nAllow: /')
+})
+
 // Docs index
 router.get('/', function (req, res) {
   res.render('index')
