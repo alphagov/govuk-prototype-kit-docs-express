@@ -10,6 +10,18 @@ const router = express.Router()
 // Local dependencies
 const utils = require('../lib/utils.js')
 
+const gtmId = process.env.GOOGLE_TAG_MANAGER_TRACKING_ID
+
+// Add global variable to determine if DoNotTrack is enabled.
+// This indicates a user has explicitly opted-out of tracking.
+// Therefore we can avoid injecting third-party scripts that do not respect this decision.
+router.use(function (req, res, next) {
+  res.locals.gtmId = gtmId
+  // See https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/DNT
+  res.locals.doNotTrackEnabled = (req.header('DNT') === '1')
+  next()
+})
+
 // Page routes
 
 router.use(function (req, res, next) {
