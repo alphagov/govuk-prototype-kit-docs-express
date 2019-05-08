@@ -24,6 +24,13 @@ router.get('/robots.txt', function (req, res) {
   res.send('User-agent: *\nAllow: /')
 })
 
+// redirect /docs/[path] to /[path] so old links don't break
+router.get('/docs*', function (req, res) {
+  // replace both /docs and /docs/
+  const newPath = req.path.replace(/\/docs\/?/,'')
+  res.redirect(301, "/" + newPath)
+})
+
 // Docs index
 router.get('/', function (req, res) {
   res.render('index')
